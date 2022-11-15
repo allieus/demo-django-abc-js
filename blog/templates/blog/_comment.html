@@ -5,7 +5,7 @@
     <a href="{% url 'blog:comment_edit' post.pk comment.pk %}">
         수정
     </a>
-    <a href="{% url 'blog:comment_delete' post.pk comment.pk %}">
+    <a href="{% url 'blog:comment_delete' post.pk comment.pk %}" class="delete-btn">
         삭제
     </a>
 </li>

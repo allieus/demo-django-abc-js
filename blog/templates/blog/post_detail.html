@@ -72,6 +72,19 @@
             }
 
             $(document).on("submit", "#comment-form-wrapper form", handle_submit);
+
+            function handle_delete(e) {
+                e.preventDefault();
+                if(confirm("Are you sure?")) {
+                    const url = $(this).attr("href");
+                    $.post(url, function() {
+                        console.log("삭제했습니다.");
+                        reload_comment_list();
+                    });
+                }
+            }
+
+            $(document).on("click", "#comment-list .delete-btn", handle_delete);
         });
     </script>
 {% endblock %}
