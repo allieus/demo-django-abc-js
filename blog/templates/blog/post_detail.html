@@ -26,15 +26,23 @@
     </a>
     {% endcomment %}
 
+    <button id="refresh-btn">새로고침</button>
+
     <ul id="comment-list">
-        {% for comment in comment_list %}
-            {% include "blog/_comment.html" with post=post comment=comment %}
-        {% endfor %}
+        {% include "blog/_comment_list.html" with comment_list=comment_list %}
     </ul>
 {% endblock %}
 
 {% block extra-script %}
     <script>
+        function reload_comment_list() {
+            $.get("{% url 'blog:comment_list' post.pk %}", function(html) {
+                $("#comment-list").html(html);
+            });
+
+        }
+        $("#refresh-btn").click(reload_comment_list);
+
         /*
         document.querySelector("#comment-form").addEventListener("submit", function(e) {
             e.preventDefault();  // submit의 기본동작을 막습니다.
@@ -52,19 +60,18 @@
                     error: function (xhr, status, error) {
                         $("#comment-form-wrapper").html(xhr.responseText);
                         // form을 덮어썼기에 새롭게 submit 이벤트 리스너를 등록해주어야 합니다.
-                        $("#comment-form-wrapper form").submit(handle_submit);
                     },
                     success: function (responseText, statusText, xhr, $form) {
-                        $("#comment-list").prepend(responseText);
+                        $("#comment-form-wrapper").html(responseText);
                         $form[0].reset();
+                        reload_comment_list();
                     },
                 })
 
                 return false;
             }
 
-            // 페이지 로딩이 끝나면 호출되는 함수
-            $("#comment-form-wrapper form").submit(handle_submit);
+            $(document).on("submit", "#comment-form-wrapper form", handle_submit);
         });
     </script>
 {% endblock %}

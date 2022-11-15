@@ -1,0 +1,3 @@
+{% for comment in comment_list %}
+    {% include "blog/_comment.html" with post=post comment=comment %}
+{% endfor %}

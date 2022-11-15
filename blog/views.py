@@ -25,6 +25,16 @@ def post_detail(request, pk):
     })
 
 
+# ajax로만 요청됨을 가정
+def comment_list(request, post_pk):
+    post = get_object_or_404(Post, pk=post_pk)
+    comment_qs = post.comment_set.all()
+    return render(request, "blog/_comment_list.html", {
+        "comment_list": comment_qs,
+        "post": post,
+    })
+
+
 @login_required
 def comment_new(request, post_pk):
     # 현재 요청이 jQuery를 통한 요청인지 아닌지를 판단할 수 있어야 합니다.
@@ -42,9 +52,10 @@ def comment_new(request, post_pk):
 
             if is_ajax:
                 # comment에 대한 li html 응답을 줘야 합니다.
-                return render(request, "blog/_comment.html", {
-                    "post": post,
-                    "comment": comment,
+                form = CommentForm()
+                return render(request, "blog/_comment_form.html", {
+                    "form": form,
+                    "comment_new_url": request.path,
                 })
             else:
                 # return redirect(f"/blog/{post_pk}/")
