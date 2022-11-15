@@ -1,0 +1,7 @@
+{% load django_bootstrap5 %}
+
+<form action="{{ comment_new_url }}" method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input type="submit" class="btn btn-primary" value="저장하기" />
+</form>

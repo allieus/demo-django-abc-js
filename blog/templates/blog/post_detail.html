@@ -1,0 +1,70 @@
+{% extends "blog/base.html" %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+    <h2>{{ post.title }}</h2>
+
+    {{ post.content }}
+
+    <div style="height: 300px;"></div>
+
+    <hr/>
+
+    <h3>댓글</h3>
+
+    {% url 'blog:comment_new' post.pk as comment_new_url %}
+    <div id="comment-form-wrapper">
+        {% include "blog/_comment_form.html" with form=comment_form comment_new_url=comment_new_url %}
+    </div>
+
+    <hr/>
+
+    {% comment %}
+    <a href="{% url 'blog:comment_new' post.pk %}">
+        댓글 작성하기
+    </a>
+    {% endcomment %}
+
+    <ul id="comment-list">
+        {% for comment in comment_list %}
+            {% include "blog/_comment.html" with post=post comment=comment %}
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block extra-script %}
+    <script>
+        /*
+        document.querySelector("#comment-form").addEventListener("submit", function(e) {
+            e.preventDefault();  // submit의 기본동작을 막습니다.
+            console.log("submit 했습니다.");
+            // Vanilla JS : 웹브라우저 기본의 JS만 쓰는 거죠.
+            // jQuery : 웹기술의 대중화를 이끌어준 고마운 라이브러리. 이제는 역사의 뒤안길로 사라지는 라이브러리.
+        });
+         */
+
+        $(function () {
+            function handle_submit() {
+                console.log("submit 했습니다.");
+
+                $(this).ajaxSubmit({
+                    error: function (xhr, status, error) {
+                        $("#comment-form-wrapper").html(xhr.responseText);
+                        // form을 덮어썼기에 새롭게 submit 이벤트 리스너를 등록해주어야 합니다.
+                        $("#comment-form-wrapper form").submit(handle_submit);
+                    },
+                    success: function (responseText, statusText, xhr, $form) {
+                        $("#comment-list").prepend(responseText);
+                        $form[0].reset();
+                    },
+                })
+
+                return false;
+            }
+
+            // 페이지 로딩이 끝나면 호출되는 함수
+            $("#comment-form-wrapper form").submit(handle_submit);
+        });
+    </script>
+{% endblock %}

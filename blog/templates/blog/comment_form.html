@@ -1,0 +1,10 @@
+{% extends "blog/base.html" %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+    <h2>댓글 폼</h2>
+
+    {% include "blog/_comment_form.html" with form=form %}
+
+{% endblock %}

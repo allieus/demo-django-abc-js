@@ -1,0 +1,31 @@
+{% load django_bootstrap5 static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <script src="//code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="{% static 'blog/jquery.form.min.js' %}"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>장고 블로그</h1>
+
+        {% block content %}{% endblock %}
+
+        <hr />
+
+        &copy; 2022. 이진석 컴퍼니.
+    </div>
+
+    {% block extra-script %}{% endblock %}
+
+</body>
+</html>

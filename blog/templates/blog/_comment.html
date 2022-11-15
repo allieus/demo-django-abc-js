@@ -1,0 +1,11 @@
+<li>
+    {{ comment.message }}
+    at {{ comment.created_at|date:"Y-m-d" }}
+    by {{ comment.author.username }}
+    <a href="{% url 'blog:comment_edit' post.pk comment.pk %}">
+        수정
+    </a>
+    <a href="{% url 'blog:comment_delete' post.pk comment.pk %}">
+        삭제
+    </a>
+</li>
